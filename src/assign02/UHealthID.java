@@ -5,7 +5,7 @@ package assign02;
  * prefix and four number suffix, such as ABCD-0123
  *
  * @author Eric Heisler
- * @version May 5, 2023
+ * @version January 23, 2024
  */
 public class UHealthID {
 

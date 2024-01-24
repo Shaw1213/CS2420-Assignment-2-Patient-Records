@@ -5,7 +5,7 @@ package assign02;
  * and a first and last name.
  *
  * @author Eric Heisler and ??
- * @version May 5, 2023
+ * @version January 23, 2024
  */
 public class Patient {
 
