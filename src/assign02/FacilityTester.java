@@ -39,7 +39,7 @@ public class FacilityTester {
 		verySmallFacility.addPatient(new CurrentPatient("Riley", "Nguyen", uHID3, 9879876, date3));
 
 		smallFacility = new Facility();
-		smallFacility.addAll("src/small_patient_list.txt");
+		smallFacility.addAll("src/assign02/small_patient_list.txt");
 
 		// FILL IN -- Extend this tester to add more tests for the facilities above,
 		// as well as to create and test larger facilities.

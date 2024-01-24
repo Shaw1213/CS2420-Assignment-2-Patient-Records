@@ -64,14 +64,11 @@ public class Patient {
 	 * 			to this patient, false otherwise.
 	 */
 	public boolean equals(Object other) {
-		if(this == other) {
-			return true;
-		}
-		if(!(other instanceof Patient)) {
+
+		if(!(other instanceof Patient patient)) {
 			return false;
 		}
-		Patient patient = (Patient) other;
-		return this.getUHealthID() == patient.getUHealthID();
+        return this.getUHealthID().equals(patient.getUHealthID());
 	}
 
 	/**
