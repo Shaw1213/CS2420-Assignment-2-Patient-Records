@@ -4,7 +4,7 @@ import java.util.TreeMap;
 import java.util.Comparator;
 
 /**
- *
+ *An index of patients that have visited a UHealth facility.
  *
  * @author Shawn Zhang
  * @version January 25, 2024
