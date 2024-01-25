@@ -11,8 +11,8 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * This class contains tests for FacilityGeneric.
  *
- * @author Eric Heisler and Shawn Zhang
- * @version January 23, 2024
+ * @author Eric Heisler , Shawn Zhang, and Bryan Munoz Barron
+ * @version January 25, 2024
  */
 public class FacilityGenericTester {
 	// Generic Facility

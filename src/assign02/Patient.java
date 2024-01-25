@@ -4,8 +4,8 @@ package assign02;
  * This class represents a UHealth patient who has a unique UHealthID
  * and a first and last name.
  *
- * @author Eric Heisler and ??
- * @version January 23, 2024
+ * @author Eric Heisler, Bryan Munoz Barron, and Shawn Zhang
+ * @version January 25, 2024
  */
 public class Patient {
 

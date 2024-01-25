@@ -7,7 +7,7 @@ import java.util.Comparator;
  *
  *
  * @author Shawn Zhang
- * @version January 24, 2024
+ * @version January 25, 2024
  */
 
 public class PatientIndex {
@@ -15,7 +15,6 @@ public class PatientIndex {
     private TreeMap<UHealthID, String> patientMap;
 
     public PatientIndex() {
-        // Initialize the TreeMap with a comparator for UHealthID's string representation
         this.patientMap = new TreeMap<>(Comparator.comparing(UHealthID::toString));
     }
 

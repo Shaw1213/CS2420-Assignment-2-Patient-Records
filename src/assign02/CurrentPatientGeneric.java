@@ -6,7 +6,7 @@ import java.util.GregorianCalendar;
  * This generic class represents a record of patients that have visited a UHealth
  *
  * @author Shawn Zhang and Bryan Munoz Barron
- * @version January 23, 2024
+ * @version January 25, 2024
  */
 
 public class CurrentPatientGeneric<Type> extends Patient {

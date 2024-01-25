@@ -9,7 +9,7 @@ import java.util.GregorianCalendar;
  * facility.
  *
  * @author Eric Heisler and Bryan Munoz Barron and Shawn Zhang
- * @version January 23, 2024
+ * @version January 25, 2024
  */
 public class FacilityGeneric<Type> {
 

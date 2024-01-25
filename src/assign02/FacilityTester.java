@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * This class contains tests for Facility.
  *
- * @author Eric Heisler and Bryan Munoz Barron
+ * @author Eric Heisler, Bryan Munoz Barron, and Shawn Zhang
  * @version January 23, 2024
  */
 public class FacilityTester {
@@ -195,7 +195,7 @@ public class FacilityTester {
 		smallFacility.setLastVisit(uHID39, date2);
 		assertEquals(changeVisit.getLastVisit(), date2);
 	}
-	
+
 	@Test
 	public void testVerySmallLookupPhysicianPatient() {
 		Patient expectedPatient = new Patient("Riley", "Nguyen", new UHealthID("HRHR-7654"));
