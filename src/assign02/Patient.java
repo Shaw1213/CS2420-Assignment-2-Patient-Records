@@ -18,9 +18,9 @@ public class Patient {
 	/**
 	 * Creates a patient with a given name and ID.
 	 *
-	 * @param firstName
-	 * @param lastName
-	 * @param uHealthID
+	 * @param firstName - first name of this patient
+	 * @param lastName - last name of this patient
+	 * @param uHealthID - UHealthID of this patient
 	 */
 	public Patient(String firstName, String lastName, UHealthID uHealthID) {
 		this.firstName = firstName;
