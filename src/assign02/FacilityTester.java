@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,7 +20,7 @@ public class FacilityTester {
 	private Facility emptyFacility, verySmallFacility, smallFacility;
 	private UHealthID uHID1, uHID2, uHID3;
 	private GregorianCalendar date1, date2, date3;
-// testing github
+
 	@BeforeEach
 	void setUp() throws Exception {
 
@@ -78,6 +79,13 @@ public class FacilityTester {
 		assertEquals(0, patients.size());
 	}
 
+	@Test
+	public void testEmptyPhysicianList(){
+		var emptyRecord = new Facility();
+		var emptyList = new ArrayList<>();
+		assertEquals(emptyList.toString(),emptyRecord.getPhysicianList().toString());
+	}
+
 	// Very small facility tests ---------------------------------------------------
 
 	@Test
@@ -88,11 +96,106 @@ public class FacilityTester {
 	}
 
 	@Test
+	public void testNotEqual(){
+		Patient shouldNotEqual = new Patient("Aaron", "Bell", new UHealthID("BCBC-2323"));
+		UHealthID uHID0 = new UHealthID("BRBM-2112");
+		assertFalse(uHID0.equals(shouldNotEqual.getUHealthID()));
+	}
+
+	@Test
+	public void testDoesEqual(){
+		Patient shouldEqual = new Patient("Tom", "Raptor", new UHealthID("VRVR-1254"));
+		assertTrue(shouldEqual.getUHealthID().equals(shouldEqual.getUHealthID()));
+		assertTrue(shouldEqual.equals(shouldEqual));
+	}
+
+	@Test
+	public void patientDoesNotExistLookupUHID(){
+		UHealthID uHID0 = new UHealthID("BMBM-2112");
+		assertNull(verySmallFacility.lookupByUHID(uHID0));
+	}
+
+	@Test
+	public void testAddPatientTrue(){
+		var uHID23 = new UHealthID("BBCO-0990");
+		assertNull(smallFacility.lookupByUHID(uHID23));
+		var patientToAdd = new CurrentPatient("Zeta", "D", uHID23, 1315191, date1);
+		assertTrue(smallFacility.addPatient(patientToAdd));
+	}
+
+	@Test
+	public void testAddPatientFalse(){
+		var uHID27 = new UHealthID("AACO-0590");
+		var patientInList = new CurrentPatient("Alpha", "Zulu", uHID27, 7615891, date1);
+		assertNull(verySmallFacility.lookupByUHID(uHID27));
+		verySmallFacility.addPatient(patientInList);
+		assertEquals(patientInList, verySmallFacility.lookupByUHID(uHID27));
+		assertFalse(verySmallFacility.addPatient(patientInList));
+	}
+
+	@Test
 	public void testVerySmallLookupPhysicianCount() {
 		ArrayList<CurrentPatient> actualPatients = verySmallFacility.lookupByPhysician(9879876);
 		assertEquals(1, actualPatients.size());
 	}
 
+	@Test
+	public void testGetPhysicianListDuplicate(){
+		var duplicatePhysician = new CurrentPatient("Riley", "Nguyen", uHID3, 9999999, date3);
+		var smallFacilityPhysList = smallFacility.getPhysicianList();
+		var samePhysicianList = smallFacility.getPhysicianList();
+		assertEquals(samePhysicianList.toString(), smallFacilityPhysList.toString());
+		smallFacility.addPatient(duplicatePhysician);
+		var expected = smallFacility.getPhysicianList();
+		assertEquals(expected.toString(), smallFacilityPhysList.toString());
+	}
+	@Test
+	public void updatePhysician(){
+		var changePhysician = new CurrentPatient("Allan", "Curse", uHID3, 9999999, date3);
+		assertEquals(9999999, changePhysician.getPhysician());
+		changePhysician.updatePhysician(2121212);
+		assertEquals(2121212, changePhysician.getPhysician());
+	}
+
+	@Test
+	public void updatePhysicianNegative(){
+		var negative = new CurrentPatient("Kelly", "Plum", uHID1, 9999999, date3);
+		assertEquals(9999999, negative.getPhysician());
+		negative.updatePhysician(-1);
+		assertEquals(-1, negative.getPhysician());
+	}
+
+	@Test
+	public void setPhysicianNoEffect(){
+		var uHID89 = new UHealthID("BRBM-0022");
+		var original = smallFacility;
+		var expected = smallFacility;
+		original.setPhysician(uHID89, 211212);
+		assertEquals(original, expected);
+	}
+
+	@Test
+	public void setPhysicianDoubleChange(){
+		var uHID99 = new UHealthID("BLLL-1022");
+		var physicianChange = new CurrentPatient("Delta", "Age", uHID99, 1234555, date3);
+		smallFacility.addPatient(physicianChange);
+		assertEquals(1234555, physicianChange.getPhysician());
+		smallFacility.setPhysician(uHID99, 1112223);
+		assertEquals(1112223, physicianChange.getPhysician());
+		smallFacility.setPhysician(uHID99, 0000001);
+		assertEquals(0000001, physicianChange.getPhysician());
+	}
+
+	@Test
+	public void testSetLastVisit(){
+		var uHID39 = new UHealthID("BLLL-1022");
+		var changeVisit = new CurrentPatient("Gamma", "Rae", uHID39, 1233565, date3);
+		smallFacility.addPatient(changeVisit);
+		assertEquals(changeVisit.getLastVisit(), date3);
+		smallFacility.setLastVisit(uHID39, date2);
+		assertEquals(changeVisit.getLastVisit(), date2);
+	}
+	
 	@Test
 	public void testVerySmallLookupPhysicianPatient() {
 		Patient expectedPatient = new Patient("Riley", "Nguyen", new UHealthID("HRHR-7654"));
