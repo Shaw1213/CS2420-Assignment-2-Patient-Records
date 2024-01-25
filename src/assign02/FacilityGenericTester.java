@@ -143,6 +143,18 @@ public class FacilityGenericTester {
 	}
 
 	@Test
+	public void testIntegerLookupByPhysician(){
+		var newPatient = new CurrentPatientGeneric<Integer>("A", "B", new UHealthID("XXLX-1111"), 11, new GregorianCalendar(2019, 1, 5));
+		phase3Facility.addPatient(newPatient);
+		assertEquals("[A B (XXLX-1111)]", phase3Facility.lookupByPhysician(11).toString());
+	}
+
+	@Test
+	public void testIntegerLookupByPhysicianEmptyList(){
+		assertEquals("[]", phase3Facility.lookupByPhysician(21).toString());
+	}
+
+	@Test
 	public void testUNIDLookupPhysicianPatient() {
 		Patient expectedPatient = new Patient(firstNames[1], lastNames[1], new UHealthID(uHIDs1[1].toString()));
 		ArrayList<CurrentPatientGeneric<Integer>> actualPatients = uNIDFacility.lookupByPhysician(1234568);
@@ -160,7 +172,6 @@ public class FacilityGenericTester {
 
 	@Test
 	public void testUHIDLookupPhysicianCount() {
-		Patient expectedPatient = new Patient(firstNames[1], lastNames[1], new UHealthID(uHIDs1[1].toString()));
 		ArrayList<CurrentPatientGeneric<UHealthID>> actualPatients = uHIDFacility.lookupByPhysician(uHIDs2[1]);
 		assertEquals(3, actualPatients.size());
 	}
@@ -194,15 +205,122 @@ public class FacilityGenericTester {
 	}
 
 	@Test
+	public void testLookupPhysicianIntegerCount() {
+		ArrayList<CurrentPatientGeneric<Integer>> four = phase3Facility.lookupByPhysician(7);
+		assertEquals(4, four.size());
+	}
+
+	@Test
 	public void testNameGetInactivePatients() {
-		ArrayList<CurrentPatientGeneric<String>> actual = nameFacility.getInactivePatients(new GregorianCalendar(2010, 0, 0));
-		assertEquals(10, actual.size());
+		ArrayList<CurrentPatientGeneric<String>> inactive = nameFacility.getInactivePatients(new GregorianCalendar(2010, 0, 0));
+		assertEquals(10, inactive.size());
+	}
+
+	@Test
+	public void testIntegerGetInactivePatients(){
+		ArrayList<CurrentPatientGeneric<Integer>> intPatients = uNIDFacility.getInactivePatients(new GregorianCalendar(2010, 0, 4));
+		assertEquals(10, intPatients.size());
+	}
+
+	@Test
+	public void testUHealthIDGetInactivePatients(){
+		ArrayList<CurrentPatientGeneric<UHealthID>> uHealthPatient = uHIDFacility.getInactivePatients(new GregorianCalendar(2010, 0, 0));
+		assertEquals(10, uHealthPatient.size());
 	}
 
 	@Test
 	public void testNameGetPhysicianList() {
 		ArrayList<String> actual = nameFacility.getPhysicianList();
 		assertEquals(8, actual.size());
+	}
+
+	@Test
+	public void testNameGetPhysicianListInteger(){
+		ArrayList<Integer> onlyOne = phase3Facility.getPhysicianList();
+		assertEquals(1, onlyOne.size());
+	}
+
+	@Test
+	public void testGetPhysicianListUHID(){
+		ArrayList<UHealthID> byUHID = uHIDFacility.getPhysicianList();
+		assertEquals(8, byUHID.size());
+	}
+
+	@Test
+	public void testSetPhysician(){
+		assertEquals("[7]", phase3Facility.getPhysicianList().toString());
+		phase3Facility.setPhysician(p3id1,2);
+		assertEquals("[2, 7]", phase3Facility.getPhysicianList().toString());
+	}
+
+	@Test
+	public void testSetPhysicianString(){
+		var stringPatient = new CurrentPatientGeneric<String>("C", "D", new UHealthID("XXXX-1111"), "7", new GregorianCalendar(2019, 1, 5));
+		var emptyStringArray = new FacilityGeneric<String>();
+		emptyStringArray.addPatient(stringPatient);
+		assertEquals("[7]", emptyStringArray.getPhysicianList().toString());
+		emptyStringArray.setPhysician(p3id1, "11");
+		assertEquals("[11]", emptyStringArray.getPhysicianList().toString());
+	}
+
+	@Test
+	public void testSetPhysicianUHealthID(){
+		var uHealthIDPhys = new UHealthID("BBBE-1223");
+		var uHealthIDToSet = new UHealthID("TTTW-1232");
+		var uHealthIDPatient = new CurrentPatientGeneric<UHealthID>("D", "D", new UHealthID("XXXX-1111"), uHealthIDPhys, new GregorianCalendar(2019, 1, 5));
+		var emptyUHealthIDRecord = new FacilityGeneric<UHealthID>();
+		emptyUHealthIDRecord.addPatient(uHealthIDPatient);
+		assertEquals("[BBBE-1223]", emptyUHealthIDRecord.getPhysicianList().toString());
+		emptyUHealthIDRecord.setPhysician(p3id1,uHealthIDToSet);
+		assertEquals("[TTTW-1232]", emptyUHealthIDRecord.getPhysicianList().toString());
+
+	}
+
+	@Test
+	public void testGetOrderByUHealthIDInteger(){
+		var first = new CurrentPatientGeneric<Integer>("First", "D", new UHealthID("XXXX-1111"), 9, new GregorianCalendar(2019, 1, 5));
+		var second = new CurrentPatientGeneric<Integer>("Second", "P", new UHealthID("XXXX-1311"), 10, new GregorianCalendar(2019, 1, 5));
+		var third = new CurrentPatientGeneric<Integer>("Third", "l", new UHealthID("XXXX-1411"), 11, new GregorianCalendar(2019, 1, 5));
+		var emptyIntRecord = new FacilityGeneric<Integer>();
+		var expectedOrder = "[First D (XXXX-1111), Second P (XXXX-1311), Third l (XXXX-1411)]";
+		emptyIntRecord.addPatient(third);
+		emptyIntRecord.addPatient(first);
+		emptyIntRecord.addPatient(second);
+		ArrayList<CurrentPatientGeneric<Integer>> integerGenericOrdered = emptyIntRecord.getOrderedByUHealthID();
+		assertEquals(expectedOrder, integerGenericOrdered.toString());
+
+	}
+
+	@Test
+	public void testGetOrderedByUHealthIDString(){
+		var first = new CurrentPatientGeneric<String>("First", "D", new UHealthID("XXXX-1111"), "9", new GregorianCalendar(2019, 1, 5));
+		var second = new CurrentPatientGeneric<String>("Second", "P", new UHealthID("XXXX-1311"), "10", new GregorianCalendar(2019, 1, 5));
+		var third = new CurrentPatientGeneric<String>("Third", "l", new UHealthID("XXXX-1411"), "12", new GregorianCalendar(2019, 1, 5));
+		var emptyStringRecord = new FacilityGeneric<String>();
+		var expectedOrder = "[First D (XXXX-1111), Second P (XXXX-1311), Third l (XXXX-1411)]";
+		emptyStringRecord.addPatient(second);
+		emptyStringRecord.addPatient(first);
+		emptyStringRecord.addPatient(third);
+		ArrayList<CurrentPatientGeneric<String>> genericStringOrdered = emptyStringRecord.getOrderedByUHealthID();
+		assertEquals(expectedOrder, genericStringOrdered.toString());
+
+	}
+
+	@Test
+	public void testGetOrderedByUHealthID(){
+		var first = new CurrentPatientGeneric<UHealthID>("First", "D", new UHealthID("XXXX-1011"), p3id2, new GregorianCalendar(2019, 1, 5));
+		var second = new CurrentPatientGeneric<UHealthID>("Second", "P", new UHealthID("XXXX-1111"), p3id4, new GregorianCalendar(2019, 1, 5));
+		var third = new CurrentPatientGeneric<UHealthID>("Third", "l", new UHealthID("XXXX-1211"), p3id1, new GregorianCalendar(2019, 1, 5));
+		var fourth = new CurrentPatientGeneric<UHealthID>("Fourth", "l", new UHealthID("XXXX-1311"), p3id1, new GregorianCalendar(2019, 1, 5));
+		var emptyUHealthIDRecord = new FacilityGeneric<UHealthID>();
+		var expectedUHealthIDOrder = "[First D (XXXX-1011), Second P (XXXX-1111), Third l (XXXX-1211), Fourth l (XXXX-1311)]";
+		emptyUHealthIDRecord.addPatient(fourth);
+		emptyUHealthIDRecord.addPatient(second);
+		emptyUHealthIDRecord.addPatient(first);
+		emptyUHealthIDRecord.addPatient(third);
+		ArrayList<CurrentPatientGeneric<UHealthID>> uHealthIDOrdered = emptyUHealthIDRecord.getOrderedByUHealthID();
+		assertEquals(expectedUHealthIDOrder, uHealthIDOrdered.toString());
+
 	}
 
 	// phase 3 tests ---------------------------------------------------------------------------
