@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * This class contains tests for Facility.
  *
  * @author Eric Heisler, Bryan Munoz Barron, and Shawn Zhang
- * @version January 23, 2024
+ * @version January 25, 2024
  */
 public class FacilityTester {
 
@@ -41,11 +41,6 @@ public class FacilityTester {
 
 		smallFacility = new Facility();
 		smallFacility.addAll("src/assign02/small_patient_list.txt");
-
-		// FILL IN -- Extend this tester to add more tests for the facilities above,
-		// as well as to create and test larger facilities.
-		// (HINT: For larger facility, generate random names, UHIDs, physicians, and
-		// dates in a loop, instead of typing one at a time.)
 	}
 
 	// Empty Facility tests --------------------------------------------------------

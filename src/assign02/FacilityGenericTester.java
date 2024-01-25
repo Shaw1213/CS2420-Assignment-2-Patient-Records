@@ -98,9 +98,6 @@ public class FacilityGenericTester {
 		phase3Facility.addPatient(new CurrentPatientGeneric<Integer>("A", "B", new UHealthID("BBBB-1111"), 7, new GregorianCalendar(2019, 1, 4)));
 		phase3Facility.addPatient(new CurrentPatientGeneric<Integer>("A", "C", new UHealthID("FFFF-1111"), 7, new GregorianCalendar(2019, 1, 3)));
 		phase3Facility.addPatient(new CurrentPatientGeneric<Integer>("R", "T", new UHealthID("BBBB-2222"), 7, new GregorianCalendar(2019, 1, 2)));
-
-		// FILL IN -- Extend this tester to add more tests for the facilities above,
-		// as well as to create and test other facilities.
 	}
 
 	// empty Facility tests --------------------------------------------------------
@@ -321,6 +318,96 @@ public class FacilityGenericTester {
 		ArrayList<CurrentPatientGeneric<UHealthID>> uHealthIDOrdered = emptyUHealthIDRecord.getOrderedByUHealthID();
 		assertEquals(expectedUHealthIDOrder, uHealthIDOrdered.toString());
 
+	}
+
+	@Test
+	public void setLastVisitUHealthID(){
+		var arrayToPutPatients = new FacilityGeneric<UHealthID>();
+		var uHID890 = new UHealthID("XXXX-1111");
+		var current = new GregorianCalendar(2019, 1, 5);
+		var expected = new GregorianCalendar(2019, 4, 5);
+		var changePatientsLastVisit = new CurrentPatientGeneric<UHealthID>("Dave", "Collins", new UHealthID("XXXX-1111"), p3id2, new GregorianCalendar(2019, 1, 5));
+		arrayToPutPatients.addPatient(changePatientsLastVisit);
+		assertEquals(current, changePatientsLastVisit.getLastVisit());
+		arrayToPutPatients.setLastVisit(uHID890, expected);
+		assertEquals(expected, changePatientsLastVisit.getLastVisit());
+	}
+
+	@Test
+	public void setLastVisitInteger(){
+		var arrayToPutPatients = new FacilityGeneric<Integer>();
+		var uHID67 = new UHealthID("XXXX-1111");
+		var current = new GregorianCalendar(2019, 1, 5);
+		var expected = new GregorianCalendar(2019, 9, 6);
+		var changePatientsLastVisit = new CurrentPatientGeneric<Integer>("Dave", "Collins", new UHealthID("XXXX-1111"), 9, new GregorianCalendar(2019, 1, 5));
+		arrayToPutPatients.addPatient(changePatientsLastVisit);
+		assertEquals(current, changePatientsLastVisit.getLastVisit());
+		arrayToPutPatients.setLastVisit(uHID67, expected);
+		assertEquals(expected, changePatientsLastVisit.getLastVisit());
+	}
+
+	@Test
+	public void setLastVisitString(){
+		var arrayToPutPatients = new FacilityGeneric<String>();
+		var uHID64 = new UHealthID("XXXX-1111");
+		var current = new GregorianCalendar(2019, 1, 5);
+		var expected = new GregorianCalendar(2019, 9, 6);
+		var changePatientsLastVisit = new CurrentPatientGeneric<String>("Dave", "Collins", new UHealthID("XXXX-1111"), "5", new GregorianCalendar(2019, 1, 5));
+		arrayToPutPatients.addPatient(changePatientsLastVisit);
+		assertEquals(current, changePatientsLastVisit.getLastVisit());
+		arrayToPutPatients.setLastVisit(uHID64, expected);
+		assertEquals(expected, changePatientsLastVisit.getLastVisit());
+	}
+
+	@Test
+	public void testGetRecentPatientsEmptyList(){
+		var current = new GregorianCalendar(2019, 1, 5);
+		var dave = new CurrentPatientGeneric<String>("Dave", "Collins", new UHealthID("XXXX-1111"), "5", new GregorianCalendar(2019, 1, 5));
+		var arrayToPutPatients = new FacilityGeneric<String>();
+		var bry = new CurrentPatientGeneric<String>("Bry", "J", new UHealthID("XXPP-1122"), "90", new GregorianCalendar(2018, 5, 11));
+		arrayToPutPatients.addPatient(dave);
+		arrayToPutPatients.addPatient(bry);
+		assertEquals("[]" , arrayToPutPatients.getRecentPatients(current).toString());
+	}
+
+	@Test
+	public void testGetRecentPatientsString(){
+		var cutOffDate = new GregorianCalendar(2019, 1, 5);
+		var martin = new CurrentPatientGeneric<String>("Martin", "White", new UHealthID("XXXX-1111"), "5", new GregorianCalendar(2020, 1, 5));
+		var arrayToPutPatients = new FacilityGeneric<String>();
+		var bry = new CurrentPatientGeneric<String>("Bry", "J", new UHealthID("XXPP-1122"), "90", new GregorianCalendar(2018, 5, 11));
+		arrayToPutPatients.addPatient(martin);
+		arrayToPutPatients.addPatient(bry);
+		assertEquals("[Martin White (XXXX-1111)]" , arrayToPutPatients.getRecentPatients(cutOffDate).toString());
+	}
+
+	@Test
+	public void testGetRecentPatientsInteger(){
+		var cutOffDate = new GregorianCalendar(2019, 1, 5);
+		var martin = new CurrentPatientGeneric<Integer>("Martin", "White", new UHealthID("XXXX-1111"), 5, new GregorianCalendar(2020, 1, 5));
+		var josh = new CurrentPatientGeneric<Integer>("Josh", "Allan", new UHealthID("BBBB-2211"), 5, new GregorianCalendar(2025, 1, 5));
+		var arrayToPutPatients = new FacilityGeneric<Integer>();
+		var bry = new CurrentPatientGeneric<Integer>("Bry", "J", new UHealthID("XXPP-1122"), 90, new GregorianCalendar(2023, 5, 11));
+		arrayToPutPatients.addPatient(josh);
+		arrayToPutPatients.addPatient(martin);
+		arrayToPutPatients.addPatient(bry);
+		assertEquals("[Josh Allan (BBBB-2211), Bry J (XXPP-1122), Martin White (XXXX-1111)]", arrayToPutPatients.getRecentPatients(cutOffDate).toString());
+	}
+
+	@Test
+	public void testGetRecentPatientsUHealthID(){
+		var uHID64 = new UHealthID("XXXX-1111");
+		var cutOffDate = new GregorianCalendar(2019, 1, 5);
+		var martin = new CurrentPatientGeneric<UHealthID>("Martin", "White", new UHealthID("XXXX-1111"), uHID64, new GregorianCalendar(2020, 10, 5));
+		var josh = new CurrentPatientGeneric<UHealthID>("Josh", "Allan", new UHealthID("BBBB-2211"), uHID64, new GregorianCalendar(2025, 9, 23));
+		var kelly = new CurrentPatientGeneric<UHealthID>("Kelly", "Price", new UHealthID("ROPP-0022"), uHID64, new GregorianCalendar(2021, 7, 11));
+		var arrayToPutPatients = new FacilityGeneric<UHealthID>();
+		var bry = new CurrentPatientGeneric<UHealthID>("Bry", "J", new UHealthID("UIPP-1122"), uHID64, new GregorianCalendar(2005, 5, 9));
+		arrayToPutPatients.addPatient(kelly);
+		arrayToPutPatients.addPatient(josh);
+		arrayToPutPatients.addPatient(martin);
+		arrayToPutPatients.addPatient(bry);
+		assertEquals("[Josh Allan (BBBB-2211), Kelly Price (ROPP-0022), Martin White (XXXX-1111)]", arrayToPutPatients.getRecentPatients(cutOffDate).toString());
 	}
 
 	// phase 3 tests ---------------------------------------------------------------------------
