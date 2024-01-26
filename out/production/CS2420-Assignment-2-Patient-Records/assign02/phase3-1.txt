@@ -1,0 +1,75 @@
+    /**
+	 * Returns the list of current patients in this facility, 
+	 * sorted by uHealthID in lexicographical order.
+	 */
+	public ArrayList<CurrentPatientGeneric<Type>> getOrderedByUHealthID() {
+	    ArrayList<CurrentPatientGeneric<Type>> patientListCopy = new ArrayList<CurrentPatientGeneric<Type>>();
+		for (CurrentPatientGeneric<Type> patient : patientList) {
+			patientListCopy.add(patient);
+		}
+	    sort(patientListCopy, new OrderByUHealthID());
+
+	    return patientListCopy;
+	}
+
+
+	/**
+	 * Returns the list of current patients in this facility with a date of last visit
+	 * later than a cutoff date, sorted by name (last name, breaking ties with first name)
+	 * Breaks ties in names using uHealthIDs (lexicographical order).
+         * Note: see the OrderByName class started for you below!
+	 * 
+	 * @param cutoffDate - value that a patient's last visit must be later than to be 
+	 * 						included in the returned list
+	 */
+	public ArrayList<CurrentPatientGeneric<Type>> getRecentPatients(GregorianCalendar cutoffDate) {
+	    // FILL IN — do not return null
+	    return null;
+	}
+
+	/**
+	 * Performs a SELECTION SORT on the input ArrayList. 
+	 * 
+	 * 1. Finds the smallest item in the list. 
+	 * 2. Swaps the smallest item with the first item in the list. 
+	 * 3. Reconsiders the list to be the remaining unsorted portion (second item to Nth item) and 
+	 *    repeats steps 1, 2, and 3.
+	 */
+	private static <ListType> void sort(ArrayList<ListType> list, Comparator<ListType> c) {
+		for (int i = 0; i < list.size() - 1; i++) {
+			int j, minIndex;
+			for (j = i + 1, minIndex = i; j < list.size(); j++) {
+				if (c.compare(list.get(j), list.get(minIndex)) < 0) {
+					minIndex = j;
+				}
+			}
+			ListType temp = list.get(i);
+			list.set(i, list.get(minIndex));
+			list.set(minIndex, temp);
+		}
+	}
+
+	/**
+	 * Comparator that defines an ordering among current patients using their uHealthIDs.
+	 * uHealthIDs are guaranteed to be unique, making a tie-breaker unnecessary.
+	 */
+	protected class OrderByUHealthID implements Comparator<CurrentPatientGeneric<Type>> {
+
+		/**
+		 * Returns a negative value if lhs (left-hand side) is less than rhs (right-hand side). 
+		 * Returns a positive value if lhs is greater than rhs.
+		 * Returns 0 if lhs and rhs are equal.
+		 */
+		public int compare(CurrentPatientGeneric<Type> lhs, CurrentPatientGeneric<Type> rhs) {
+			return lhs.getUHealthID().toString().compareTo(rhs.getUHealthID().toString());
+		}
+	}
+
+	/**
+	 * Comparator that defines an ordering among current patients using their names.
+	 * Compares by last name, then first name (if last names are the same), then uHealthID 
+	 * (if both names are the same).  uHealthIDs are guaranteed to be unique.
+	 */
+	protected class OrderByName implements Comparator<CurrentPatientGeneric<Type>> {
+		// FILL IN
+	}
